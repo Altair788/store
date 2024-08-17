@@ -3,8 +3,8 @@ from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'main/home.html')
 
 
 def contact(request):
-    return render(request, 'contact.html')
+    return render(request, 'main/contact.html')
