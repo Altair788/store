@@ -9,6 +9,7 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=100, verbose_name='Наименование', help_text='Введите наименование категории')
     description = models.TextField(verbose_name='Описание', help_text='Введите описание категории', **NULLABLE)
+    created_at = models.DateTimeField(verbose_name='Дата создания (записи в БД)', **NULLABLE)
 
     def __str__(self):
         """
