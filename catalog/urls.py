@@ -7,6 +7,6 @@ from catalog.views import home, contact
 app_name = CatalogConfig.name
 
 urlpatterns = [
-                  path('', home, name='main/home'),
-                  path('contacts/', contact, name='main/contact'),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("", home, name="main/home"),
+    path("contacts/", contact, name="main/contact"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
