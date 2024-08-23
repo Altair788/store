@@ -18,7 +18,7 @@ def write_to_file(data: dict[str, Any], filename: Path) -> None:
         None
     """
     if filename.exists():
-        with open(filename, 'r', encoding='utf-8') as f:
+        with open(filename, "r", encoding="utf-8") as f:
             try:
                 existing_data = json.load(f)
             except json.JSONDecodeError:
@@ -28,5 +28,5 @@ def write_to_file(data: dict[str, Any], filename: Path) -> None:
 
     existing_data.append(data)
 
-    with open(filename, 'w', encoding='utf-8') as f:
+    with open(filename, "w", encoding="utf-8") as f:
         json.dump(existing_data, f, ensure_ascii=False, indent=4)
