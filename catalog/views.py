@@ -1,12 +1,19 @@
 from django.shortcuts import render
 
+from catalog.models import Product
 from configs import FEEDBACKS_PATH
 from utils import write_to_file
 
 
 # Create your views here.
-def home(request):
-    return render(request, "main/home.html")
+# def home(request):
+#     return render(request, "main/home.html")
+
+
+def products_list(request):
+    products = Product.objects.all()
+    context = {'products': products}
+    return render(request, 'main/products_list.html', context)
 
 
 def contact(request):
