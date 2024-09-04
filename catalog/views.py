@@ -16,6 +16,7 @@ def product_detail(request, pk):
     context = {"product": product}
     return render(request, 'main/product_detail.html', context)
 
+
 def contact(request):
     if request.method == "POST":
         feedback_dict = {}
