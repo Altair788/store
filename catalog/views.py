@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView
 
@@ -38,4 +38,4 @@ class ContactView(View):
         write_to_file(feedback_dict, FEEDBACKS_PATH)
         print("Обращение записано.")
 
-        return HttpResponseRedirect(reverse('catalog:catalog/contact'))
+        return HttpResponseRedirect(reverse_lazy('catalog:catalog/contact'))
