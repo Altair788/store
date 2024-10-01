@@ -1,24 +1,30 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.views import View
+from django.views.generic import ListView, DetailView
 
 from catalog.models import Product
 from configs import FEEDBACKS_PATH
 from utils import write_to_file
 
 
-def products_list(request):
-    products = Product.objects.all()
-    context = {"products": products}
-    return render(request, "main/products_list.html", context)
+class ProductListView(ListView):
+    model = Product
 
 
-def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    context = {"product": product}
-    return render(request, "main/product_detail.html", context)
+class ProductDetailView(DetailView):
+    model = Product
 
 
-def contact(request):
-    if request.method == "POST":
+
+class ContactView(View):
+    template_name = 'catalog/contact.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
         feedback_dict = {}
         name = request.POST.get("name")
         phone = request.POST.get("phone")
@@ -32,4 +38,4 @@ def contact(request):
         write_to_file(feedback_dict, FEEDBACKS_PATH)
         print("Обращение записано.")
 
-    return render(request, "main/contact.html")
+        return HttpResponseRedirect(reverse_lazy('catalog:catalog/contact'))

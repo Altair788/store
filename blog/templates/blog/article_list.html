@@ -1,0 +1,34 @@
+{% extends 'catalog/home.html' %}
+{% load blog_tags  %}
+{% block content %}
+<div class="col-12 mb-5">
+    <a class="btn btn-outline-primary ms-4" href="{% url 'blog:article_create' %}">Добавить статью</a>
+</div>
+{% if message %}
+<div class="alert alert-warning">{{ message }}</div>  <!-- Отображение сообщения -->
+{% endif %}
+<div class="row g-3 ms-3 me-3">
+    {% for object in object_list %}
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <img src="{{ object.preview | media_blog_filter }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ object.title }}">
+            <div class="card-body">
+                <p class="card-text">
+                    {{ object.title }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <a href="{% url 'blog:article_detail' object.pk %}"
+                           class="btn btn-sm btn-outline-secondary">Посмотреть</a>
+                        <a href="{% url 'blog:article_update' object.pk %}" type="button"
+                           class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                        <a href="{% url 'blog:article_delete' object.pk %}" type="button"
+                           class="btn btn-sm btn-outline-danger">Удалить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

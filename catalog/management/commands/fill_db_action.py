@@ -23,7 +23,7 @@ class Command(BaseCommand):
                 data = json.load(file)
 
                 for row in data:
-                    if row["model"] == "catalog.category":
+                    if row["model"] == "blog.category":
                         category_data_json = {
                             "pk": row["pk"],
                             "name": row["fields"].get("name"),
@@ -53,7 +53,7 @@ class Command(BaseCommand):
                 data = json.load(file)
 
                 for row in data:
-                    if row["model"] == "catalog.product":
+                    if row["model"] == "blog.product":
                         product_data_json = {
                             "name": row["fields"].get("name"),
                             "description": row["fields"].get("description"),
