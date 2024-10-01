@@ -40,7 +40,7 @@ class ArticleUpdateView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('blog:article_update', args=[self.kwargs.get('pk')])
+        return reverse('blog:article_detail', args=[self.kwargs.get('pk')])
 
 
 class ArticleListView(ListView):
@@ -51,13 +51,20 @@ class ArticleListView(ListView):
         queryset = queryset.filter(is_published=True)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if not context['object_list']:
+            context['message'] = ('В настоящее время мы готовим для вас новые публикации'
+                                  ' с результатами проведенных исследований.')
+        return context
+
 
 class ArticleDetailView(DetailView):
     model = Article
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        self.object.views_count += 1
+        self.object.views_counter += 1
         self.object.save()
         return self.object
 
