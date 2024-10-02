@@ -1,10 +1,9 @@
-from django.core.mail import send_mail
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from pytils.translit import slugify
 
 from blog.models import Article
-from config.settings import EMAIL_HOST_USER
+from blog.tasks import send_notification_email
 
 
 class ArticleCreateView(CreateView):
@@ -17,10 +16,7 @@ class ArticleCreateView(CreateView):
     success_url = reverse_lazy('blog:article_list')
 
     def form_valid(self, form):
-        if form.is_valid():
-            new_article = form.save()
-            new_article.slug = slugify(new_article.title)
-            new_article.save()
+        form.instance.slug = slugify(form.instance.title)
 
         return super().form_valid(form)
 
@@ -34,10 +30,7 @@ class ArticleUpdateView(UpdateView):
     )
 
     def form_valid(self, form):
-        if form.is_valid():
-            new_article = form.save()
-            new_article.slug = slugify(new_article.title)
-            new_article.save()
+        form.instance.slug = slugify(form.instance.title)
 
         return super().form_valid(form)
 
@@ -69,18 +62,11 @@ class ArticleDetailView(DetailView):
         self.object.views_counter += 1
         self.object.save()
 
-        if self.object.views_counter == 100:
-            self.send_notification_email()
+        if self.object.views_counter == 25:
+            send_notification_email(self.object.title, self.object.views_counter)
 
         return self.object
 
-    def send_notification_email(self):
-        subject = f"Поздравляем! Ваша статья '{self.object.title}' достигла 100 просмотров!"
-        message = f"Статья '{self.object.title}' теперь имеет {self.object.views_counter} просмотров."
-        from_email = EMAIL_HOST_USER
-        recipient_list = [from_email]
-
-        send_mail(subject, message, from_email, recipient_list)
 
 class ArticleDeleteView(DeleteView):
     model = Article

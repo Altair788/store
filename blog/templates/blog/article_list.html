@@ -1,5 +1,5 @@
 {% extends 'catalog/home.html' %}
-{% load blog_tags  %}
+{% load blog_tags static %}
 {% block content %}
 <div class="col-12 mb-5">
     <a class="btn btn-outline-primary ms-4" href="{% url 'blog:article_create' %}">Добавить статью</a>
@@ -11,7 +11,8 @@
     {% for object in object_list %}
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
-            <img src="{{ object.preview | media_blog_filter }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ object.title }}">
+            <img src="{% if object.preview %}{{ object.preview | media_blog_filter }}{% else %}{% static 'default_preview.jpg' %}{% endif %}"
+                 class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ object.title }}">
             <div class="card-body">
                 <p class="card-text">
                     {{ object.title }}
