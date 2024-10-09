@@ -3,7 +3,9 @@
 {% block content %}
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
-
+        <div class="col-12 mb-5">
+            <a class="btn btn-outline-primary" href="{% url 'catalog:create_product' %}">Добавить продукт</a>
+        </div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for product in object_list %}
             <div class="col">
@@ -14,8 +16,11 @@
                         <p class="card-text">{{ product.description|slice:":100" }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a class="btn btn-outline-info" href="{% url 'catalog:catalog/product_detail' product.pk %}"
+                                <a class="btn btn-outline-info"
+                                   href="{% url 'catalog:catalog/product_detail' product.pk %}"
                                    role="button">Узнать цену</a>
+                                 <a href="{% url 'catalog:delete_product' product.pk %}" type="button"
+                       class="btn btn-sm btn-outline-secondary">Delete</a>
                             </div>
                         </div>
                     </div>
