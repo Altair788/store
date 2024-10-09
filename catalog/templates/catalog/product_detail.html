@@ -12,6 +12,11 @@
                         <h5 class="card-title">Наименование: {{ object.name }}</h5>
                         <h6 class="card-title">Категория: {{ object.category }}</h6>
                         <p class="card-text">Описание: {{ object.description|slice:":100" }}</p>
+                        {% for version in object.versions.all %}
+                        {% if version.is_active %}
+                        <p class="card-text">{{ version }}</p>
+                        {% endif %}
+                        {% endfor %}
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-outline-info" href="{% url 'catalog:catalog/product_list' %}"

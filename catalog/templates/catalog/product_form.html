@@ -21,12 +21,8 @@
             </div>
         </div>
         <div class="col-6">
-
-            {% if object %}
             <div class="card">
                 <p class="card-text">Версия</p>
-                {% else %}
-                {% endif %}
                 <div class="card-body">
                     {{ formset.management_form }}
                     {% for form in formset.forms %}

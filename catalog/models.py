@@ -90,12 +90,13 @@ class Version(models.Model):
         **NULLABLE,
         verbose_name="продукт"
     )
-    is_active = models.BooleanField(default=False, verbose_name="признак текущей версии")
-    # version_sign = models.BooleanField(default=False, verbose_name='признак версии')
+    is_active = models.BooleanField(default=False, verbose_name='признак версии')
     def __str__(self):
         return f"Версия {self.version_title} номер {self.version_number}."
 
     class Meta:
         verbose_name = "версия"
         verbose_name_plural = "версии"
+        ordering = ["product", "version_number", "version_title", "is_active"]
+
 
