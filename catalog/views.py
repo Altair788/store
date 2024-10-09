@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from catalog.forms import ProductForm
 from catalog.models import Product
 from configs import FEEDBACKS_PATH
 from utils import write_to_file
@@ -14,6 +15,24 @@ class ProductListView(ListView):
 
 class ProductDetailView(DetailView):
     model = Product
+
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    success_url = reverse_lazy('catalog:catalog/product_list')
+    form_class = ProductForm
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    success_url = reverse_lazy('catalog:catalog/product_list')
+    form_class = ProductForm
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('catalog:catalog/product_list')
+
 
 
 
@@ -38,4 +57,3 @@ class ContactView(View):
         print("Обращение записано.")
 
         return redirect(reverse_lazy('catalog:catalog/contact'))
-
