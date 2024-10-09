@@ -22,7 +22,11 @@
         </div>
         <div class="col-6">
             <div class="card">
-                <p class="card-text">Версия</p>
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Версия
+                    </h3>
+                </div>
                 <div class="card-body">
                     {{ formset.management_form }}
                     {% for form in formset.forms %}
