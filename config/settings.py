@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "catalog",
     "blog",
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -101,4 +102,6 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'slobodyanikeduard@yandex.ru'  # Ваш адрес электронной почты
-EMAIL_HOST_PASSWORD = 'nifwqlwmnjrvihsk'  # Ваш пароль от почты
+EMAIL_HOST_PASSWORD = 'nifwqlwmnjrvihsk'  # Ваш пароль не от почты, а от приложения
+
+AUTH_USER_MODEL = 'users.User'
