@@ -13,7 +13,7 @@ class User(AbstractUser):
 
     phone = PhoneNumberField(**NULLABLE, unique=True, verbose_name='номер телефона')
     country = models.CharField(max_length=100, verbose_name='страна', **NULLABLE)
-    avatar = models.ImageField(upload_to='users/', verbose_name='аватар', **NULLABLE)
+    avatar = models.ImageField(upload_to='users/avatars/', verbose_name='аватар', help_text='Загрузите аватарку', **NULLABLE)
     company_name = models.TextField(
         verbose_name="Название компании", help_text="Введите название компании", **NULLABLE
     )
