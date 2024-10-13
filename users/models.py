@@ -8,6 +8,7 @@ class User(AbstractUser):
     username = None
 
     email = models.EmailField(unique=True, verbose_name='почта')
+    token = models.CharField(max_length=150, verbose_name='токен', null=True, blank=True)
 
     phone = models.CharField(max_length=35, verbose_name='телефон', **NULLABLE)
     country = models.CharField(max_length=100, verbose_name='страна', **NULLABLE)
