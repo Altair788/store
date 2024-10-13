@@ -10,11 +10,12 @@ from users.forms import UserRegisterForm
 from users.models import User
 
 
-class RegisterView(CreateView):
+class UserCreateView(CreateView):
     model = User
     form_class = UserRegisterForm
+    # чтобы обойти ошибку TemplateDoesNotExist at /users/register/
     template_name = 'users/register.html'
-    success_url = reverse_lazy('users:login')
+    success_url = reverse_lazy("users:login")
 
     def form_valid(self, form):
         #  сохраняем пользователя
@@ -24,10 +25,10 @@ class RegisterView(CreateView):
         user.token = token
         user.save()
         host = self.request.get_host()
-        url = f"http://{host}/users/email-confirm/{token}/"
+        url = f"http://{host}/users_alt/email-confirm/{token}/"
         send_mail(
             subject="Подтверждение почты",
-            message=f"Здравствуйте, перейдите по ссылке для подтверждения почты {url}",
+            message=f"Привет, перейди по ссылке для подтверждения почты {url}",
             from_email=EMAIL_HOST_USER,
             recipient_list=[user.email],
         )
@@ -37,4 +38,5 @@ class RegisterView(CreateView):
 def email_verification(request, token):
     user = get_object_or_404(User, token=token)
     user.is_active = True
+    user.save()
     return redirect(reverse('users:login'))
