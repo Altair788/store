@@ -16,7 +16,7 @@ class User(AbstractUser):
     company_name = models.TextField(
         verbose_name="Название компании", help_text="Введите название компании", **NULLABLE
     )
-    inn = models.CharField(max_length=12, verbose_name='ИНН', **NULLABLE)
+    inn = models.CharField(max_length=12, verbose_name='ИНН', help_text="Введите индивидуальный номер налогоплательщика", **NULLABLE)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
