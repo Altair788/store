@@ -80,7 +80,7 @@ class ArticleDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
-class MyView(LoginRequiredMixin, View):
+class BlogProtectedView(LoginRequiredMixin, View):
     login_url = "login/"  # URL для страницы входа
     redirect_field_name = "next"  # Параметр для возврата на предыдущую страницу после входа
 

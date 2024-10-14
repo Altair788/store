@@ -120,7 +120,7 @@ class ContactView(View):
 
 
 
-class MyView(LoginRequiredMixin, View):
+class CatalogProtectedView(LoginRequiredMixin, View):
     login_url = "login/"  # URL для страницы входа
     redirect_field_name = "next"  # Параметр для возврата на предыдущую страницу после входа
 
