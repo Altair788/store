@@ -6,13 +6,19 @@
                 <p class="text-body-secondary">Качество. Надежность. Доверие.</p>
             </div>
             <div class="col-sm-4 offset-md-1 py-4">
-                <h4>Навигация</h4>
+                <h4 class="text-white"> Меню</h4>
                 <ul class="list-unstyled">
                     <li><a href="{% url 'catalog:catalog/product_list' %}" class="text-white">Главная</a></li>
                     <li><a href="{% url 'catalog:catalog/contact' %}" class="text-white">Контакты</a></li>
                     <li><a href="{% url 'blog:article_list' %}" class="text-white">Публикации</a></li>
-                    <li><a href="#" class="text-white">Вход</a></li>
-                    <li><a href="#" class="text-white">Регистрация</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:profile' %}" class="text-white">Профиль</a></li>
+                    <li><a href="{% url 'users:logout' %}" class="text-white">Выйти</a></li>
+                    {% else %}
+                    <li><a href="{% url 'users:login' %}" class="text-white">Войти</a></li>
+                    <li><a href="{% url 'users:register' %}" class="text-white">Регистрация</a></li>
+                    <li><a href="{% url 'users:password_reset' %}" class="text-white">Восстановить пароль</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
