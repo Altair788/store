@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.forms import inlineformset_factory
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -40,6 +40,11 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return context_data
 
     def form_valid(self, form):
+        product = form.save()
+        user = self.request.user
+        product.owner = user
+        product.save()
+
         context_data = self.get_context_data()
         formset = context_data["formset"]
         if form.is_valid() and formset.is_valid():
@@ -101,7 +106,8 @@ class ContactView(View):
     def get(self, request):
         return render(request, self.template_name)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         feedback_dict = {}
         name = request.POST.get("name")
         phone = request.POST.get("phone")
@@ -116,8 +122,6 @@ class ContactView(View):
         print("Обращение записано.")
 
         return redirect(reverse_lazy('catalog:catalog/contact'))
-
-
 
 
 class CatalogProtectedView(LoginRequiredMixin, View):
