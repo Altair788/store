@@ -10,7 +10,7 @@ from django.views import View
 from django.views.generic import CreateView, UpdateView
 
 from config.settings import EMAIL_HOST_USER
-from users.forms import UserRegisterForm, UserProfileForm
+from users.forms import UserRegisterForm, UserProfileForm, PasswordResetForm
 from users.models import User
 
 
@@ -56,34 +56,38 @@ class ProfileView(UpdateView):
 
 
 class PasswordResetView(View):
+    template_name = 'users/password_reset.html'
+    success_url = reverse_lazy("users:login")
+
     def get(self, request):
-        return render(request, 'users/password_reset.html')
+        form = PasswordResetForm()
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        email = request.POST.get('email')
-        user = get_object_or_404(User, email=email)
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = get_object_or_404(User, email=email)
 
-        # Генерация нового случайного пароля
-        new_password = self.generate_random_password()
+            # Генерация нового пароля
+            new_password = self.generate_random_password()
 
-        # Хеширование нового пароля
-        hashed_password = make_password(new_password)
+            # Обновление пароля пользователя с автоматическим хешированием через set_password
+            user.set_password(new_password)
+            user.save()
 
-        # Обновление пароля пользователя
-        user.password = hashed_password
-        user.save()
+            # Отправка email с новым паролем
+            send_mail(
+                subject="Сброс пароля",
+                message=f"Ваш новый пароль: {new_password}",
+                from_email=EMAIL_HOST_USER,
+                recipient_list=[user.email],
+            )
+            return redirect(self.success_url)
+        return render(request, self.template_name, {'form': form})
 
-        # Отправка email с новым паролем
-        send_mail(
-            subject="Сброс пароля",
-            message=f"Ваш новый пароль: {new_password}",
-            from_email=EMAIL_HOST_USER,
-            recipient_list=[user.email],
-        )
 
-        return redirect('users:login')  # Перенаправление на страницу входа после отправки email
-
-    def generate_random_password(self, length=8):
+    def generate_random_password(self, length=16):
         """Генерация случайного пароля."""
         characters = string.ascii_letters + string.digits + string.punctuation
         return ''.join(random.choice(characters) for _ in range(length))

@@ -10,6 +10,11 @@ class UserRegisterForm(UserCreationForm):
         fields = ('email', 'password1', 'password2',)
 
 
+class PasswordResetForm(forms.Form):
+    email = forms.EmailField(label='Введите вашу почту', max_length=254)
+
+
+
 class UserProfileForm(UserChangeForm):
 
     class Meta:
