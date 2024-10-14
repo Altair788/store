@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.urls import path
 from catalog.apps import CatalogConfig
 from catalog.views import ProductListView, ProductDetailView, ContactView, ProductCreateView, ProductUpdateView, \
-    ProductDeleteView
+    ProductDeleteView, MyView
 
 app_name = CatalogConfig.name
 
@@ -14,4 +14,5 @@ urlpatterns = [
     path('create/', ProductCreateView.as_view(), name='create_product'),
     path('update/<int:pk>/', ProductUpdateView.as_view(), name='update_product'),
     path('delete/<int:pk>/', ProductDeleteView.as_view(), name='delete_product'),
+    path('protected-view/', MyView.as_view(), name='protected_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

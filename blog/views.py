@@ -1,4 +1,8 @@
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import redirect_to_login
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from pytils.translit import slugify
 
@@ -6,7 +10,7 @@ from blog.models import Article
 from blog.tasks import send_notification_email
 
 
-class ArticleCreateView(CreateView):
+class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     fields = (
         'title',
@@ -21,7 +25,7 @@ class ArticleCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ArticleUpdateView(UpdateView):
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
     fields = (
         'title',
@@ -54,7 +58,7 @@ class ArticleListView(ListView):
         return context
 
 
-class ArticleDetailView(DetailView):
+class ArticleDetailView(LoginRequiredMixin, DetailView):
     model = Article
 
     def get_object(self, queryset=None):
@@ -68,6 +72,23 @@ class ArticleDetailView(DetailView):
         return self.object
 
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     success_url = reverse_lazy('blog:article_list')
+
+
+
+
+
+class MyView(LoginRequiredMixin, View):
+    login_url = "login/"  # URL для страницы входа
+    redirect_field_name = "next"  # Параметр для возврата на предыдущую страницу после входа
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(
+                self.request.get_full_path(),
+                settings.LOGIN_URL,
+                self.redirect_field_name)
+
+        return super().dispatch(request, *args, **kwargs)

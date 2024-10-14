@@ -2,7 +2,10 @@ import secrets
 import random
 import string
 
+from django.conf import settings
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import redirect_to_login
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
@@ -88,6 +91,5 @@ class PasswordResetView(View):
 
 
     def generate_random_password(self, length=16):
-        """Генерация случайного пароля."""
         characters = string.ascii_letters + string.digits + string.punctuation
         return ''.join(random.choice(characters) for _ in range(length))

@@ -14,9 +14,7 @@ class PasswordResetForm(forms.Form):
     email = forms.EmailField(label='Введите вашу почту', max_length=254)
 
 
-
 class UserProfileForm(UserChangeForm):
-
     class Meta:
         model = User
         fields = ('email', 'phone', 'country', 'avatar', 'company_name', 'inn',)

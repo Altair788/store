@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import redirect_to_login
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -14,11 +17,11 @@ class ProductListView(ListView):
     model = Product
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     success_url = reverse_lazy('catalog:catalog/product_list')
     form_class = ProductForm
@@ -50,11 +53,11 @@ class ProductCreateView(CreateView):
                 self.get_context_data(form=form, formset=formset)
             )
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     success_url = reverse_lazy('catalog:catalog/product_list')
     form_class = ProductForm
-
 
     def get_success_url(self):
         return reverse("catalog:catalog/product_detail", args=[self.kwargs.get("pk")])
@@ -87,11 +90,9 @@ class ProductUpdateView(UpdateView):
             )
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:catalog/product_list')
-
-
 
 
 class ContactView(View):
@@ -115,3 +116,19 @@ class ContactView(View):
         print("Обращение записано.")
 
         return redirect(reverse_lazy('catalog:catalog/contact'))
+
+
+
+
+class MyView(LoginRequiredMixin, View):
+    login_url = "login/"  # URL для страницы входа
+    redirect_field_name = "next"  # Параметр для возврата на предыдущую страницу после входа
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect_to_login(
+                self.request.get_full_path(),
+                settings.LOGIN_URL,
+                self.redirect_field_name)
+
+        return super().dispatch(request, *args, **kwargs)
