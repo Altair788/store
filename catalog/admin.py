@@ -10,6 +10,7 @@ class ProductAdmin(admin.ModelAdmin):
         "name",
         "price",
         "category",
+        'is_published',
     )
     list_filter = ("category",)
     search_fields = (

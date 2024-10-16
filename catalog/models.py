@@ -46,6 +46,7 @@ class Product(models.Model):
     )
 
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', help_text='Укажите владельца продукта',**NULLABLE)
+    is_published = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name}"
@@ -53,6 +54,10 @@ class Product(models.Model):
     class Meta:
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
+
+        permissions = [
+            ('set_published', 'Can publish posts')
+        ]
 
 
 

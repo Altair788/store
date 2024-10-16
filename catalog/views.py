@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
@@ -59,10 +59,11 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             )
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     success_url = reverse_lazy('catalog:catalog/product_list')
     form_class = ProductForm
+    permission_required = 'catalog.set_published'
 
     def get_success_url(self):
         return reverse("catalog:catalog/product_detail", args=[self.kwargs.get("pk")])
