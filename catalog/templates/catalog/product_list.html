@@ -25,8 +25,13 @@
                                 <a class="btn btn-outline-info"
                                    href="{% url 'catalog:catalog/product_detail' product.pk %}"
                                    role="button">Узнать цену</a>
-                                 <a href="{% url 'catalog:delete_product' product.pk %}" type="button"
-                       class="btn btn-sm btn-outline-secondary">Delete</a>
+                                {% if user == product.owner or perms.catalog.change_product %}
+                                <a class="btn btn-outline-info"
+                                   href="{% url 'catalog:update_product' product.pk %}"
+                                   role="button">Редактировать</a>
+                                {% endif %}
+                                <a href="{% url 'catalog:delete_product' product.pk %}" type="button"
+                       class="btn btn-sm btn-outline-secondary">Удалить</a>
                             </div>
                         </div>
                     </div>

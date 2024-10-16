@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -59,11 +60,11 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             )
 
 
-class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     success_url = reverse_lazy('catalog:catalog/product_list')
     form_class = ProductForm
-    permission_required = 'catalog.set_published'
+    permission_required = ('catalog.set_published', 'catalog.change_product',)
 
     def get_success_url(self):
         return reverse("catalog:catalog/product_detail", args=[self.kwargs.get("pk")])
@@ -94,6 +95,23 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
             return self.render_to_response(
                 self.get_context_data(form=form, formset=formset)
             )
+
+    # если хотим оставить
+    # def has_permission(self):
+    #     self.object = self.get_object()
+    #     user = self.request.user
+    #     # Проверяем наличие хотя бы одного из разрешений
+    #     return user == self.object.owner or user.has_perms(self.permission_required)
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        user = self.request.user
+        if user == self.object.owner or user.has_perm('catalog.change_product'):
+            return self.object
+        else:
+            raise PermissionDenied
+
+
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
