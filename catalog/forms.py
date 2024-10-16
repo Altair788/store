@@ -48,16 +48,3 @@ class VersionForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Version
         fields = "__all__"
-    #
-    # def clean_count(self):
-    #     cleaned_data = super().clean()
-    #     is_active = self.cleaned_data.get('is_active')
-    #     product = self.cleaned_data.get('product')
-    #
-    #     if product:
-    #         active_versions_count = Version.objects.filter(product=product, is_active=True).count()
-    #
-    #         if is_active in active_versions_count >= 1:
-    #             raise forms.ValidationError("Только одна версия может быть активной. Пожалуйста, выберите только одну активную версию.")
-    #
-    #     return cleaned_data
