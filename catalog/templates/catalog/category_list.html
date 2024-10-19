@@ -1,0 +1,22 @@
+{% extends 'catalog/home.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container py-5">
+    <h1>Список категорий</h1>
+    <ul class="list-group">
+        {% for category in object_list %}
+        <li class="list-group-item">
+            <h5>{{ category.name }}</h5>
+            <p>{{ category.description }}</p>
+            <a href="{% url 'catalog:catalog/category_detail' category.pk %}" class="btn btn-info">Посмотреть</a>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Нет доступных категорий.</li>
+        {% endfor %}
+    </ul>
+    <div class="btn-group">
+        <a class="btn btn-outline-info mt-1" href="{% url 'catalog:catalog/product_list' %}"
+           role="button">Назад</a>
+    </div>
+</div>
+{% endblock %}

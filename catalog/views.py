@@ -9,13 +9,17 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import ProductForm, VersionForm
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
+from catalog.services import get_products_from_cache, get_categories_from_cache
 from configs import FEEDBACKS_PATH
 from utils import write_to_file
 
 
 class ProductListView(ListView):
     model = Product
+
+    def get_queryset(self):
+        return get_products_from_cache()
 
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
@@ -112,8 +116,6 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             raise PermissionDenied
 
 
-
-
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:catalog/product_list')
@@ -155,3 +157,14 @@ class CatalogProtectedView(LoginRequiredMixin, View):
                 self.redirect_field_name)
 
         return super().dispatch(request, *args, **kwargs)
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+
+    def get_queryset(self):
+        return get_categories_from_cache()
+
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    model = Category
