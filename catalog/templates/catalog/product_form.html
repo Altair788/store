@@ -15,7 +15,10 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary">Сохранить</button>
-
+                </div>
+                <div class="btn-group">
+                    <a class="btn btn-outline-info mt-1" href="{% url 'catalog:catalog/product_list' %}"
+                       role="button">Назад</a>
                 </div>
                 <div class="card-footer"></div>
             </div>
